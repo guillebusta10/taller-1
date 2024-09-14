@@ -74,47 +74,9 @@ void buscarMaterialautor(MaterialBibliografico*biblioteca[],string autorBuscado 
     }
 };
 
-void agregarmaterial(MaterialBibliografico*biblioteca[],int cont){
-    string tipo;
-    cout<<"ingrese el tipo de material que desea agregar (Revista/Libro): "<<endl;
-    cin>> tipo;
-    if(tipo=="Revista"){
-        string nombre;
-        cout<<"ingrese nombre: "<<endl;
-        cin >> nombre;
-        string isbn;
-        cout<<"ingrese isbn: "<<endl;
-        cin>> isbn;
-        string autor;
-        cout<<"ingrese autor: "<<endl;
-        cin>> autor;
-        int numeroEdicion;
-        cout<<"ingrese numero de edicion: "<<endl;
-        cin>> numeroEdicion;
-        string mes;
-        cout<<"ingrese mes de publicacion: "<<endl;
-        cin >> mes;    
-        biblioteca[cont++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
-    }else if(tipo=="Libro"){
-        string nombre;
-        cout<<"ingrese nombre: "<<endl;
-        cin >> nombre;
-        string isbn;
-        cout<<"ingrese isbn: "<<endl;
-        cin>> isbn;
-        string autor;
-        cout<<"ingrese autor: "<<endl;
-        cin>> autor;
-        string fecha;
-        cout<<"ingrese fecha de publicacion: "<<endl;
-        cin>> fecha;
-        string resumen;
-        cout<<"ingrese resumen: "<<endl;
-        cin >> resumen;    
-        biblioteca[cont++]=new Libro(nombre,isbn,autor,fecha,resumen);    
-    }
+//void agregarmaterial(MaterialBibliografico *biblioteca[],int cont){
 
-};
+
 void mostrarMaterial(MaterialBibliografico*biblioteca[]){
     for(int i=0;i<100;i++){
         if(biblioteca[i]!=nullptr){
@@ -169,33 +131,70 @@ int main(){
     int cont;
     cont=0;
   
-    ///leerarchivo("",biblioteca,cont);
-    int opcion;
-    cout<<"MENU USUARIO"<<endl;
-    cout<<"Ingrese opcion: "<<endl;
-    cout<<"1.- AGREGAR MATERIAL "<<endl;
-    cout<<"2.- MOSTRAR MATERIALES "<<endl;
-    cout<<"3.- BUSCAR POR NOMBRE"<<endl;
-    cout<<"4.- BUSCAR POR AUTOR"<<endl;
-    cout<<"5.- PRESTAR MATERIAL"<<endl;
-    cout<<"6.- DEVOLVER MATERIAL"<<endl;
-    cout<<"7.- AGREGAR USUARIO "<<endl;
-    cout<<"8.- BUSCAR USUARIO "<<endl;
-    cout<<"9.- ELIMINAR USUARIO "<<endl;
-    
-    cin>>opcion;
+    /*leerarchivo("",biblioteca,cont);*/
 
     while(true){
+        int opcion;
+        cout<<"MENU USUARIO"<<endl;
+        cout<<"Ingrese opcion: "<<endl;
+        cout<<"1.- AGREGAR MATERIAL (Libro) "<<endl;
+        cout<<"2.- AGREGAR MAYERIAL (Revista) "<<endl;
+        cout<<"3.- MOSTRAR MATERIALES"<<endl;
+        cout<<"4.- BUSCAR POR NOMBRE"<<endl;
+        cout<<"5.- BUSCAR POR AUTOR"<<endl;
+        cout<<"6.- PRESTAR MATERIAL"<<endl;
+        cout<<"7.- DEVOLVER MATERIAL"<<endl;
+        cout<<"8.- AGREGAR USUARIO "<<endl;
+        cout<<"9.- BUSCAR USUARIO "<<endl;
+        cout<<"10.- ELIMINAR USUARIO "<<endl;
+        
+        cin>>opcion;
+        cin.ignore();
         switch (opcion){
             case 1:{
-                agregarmaterial(biblioteca,cont);
+                string nombre;
+                cout<<"ingrese nombre: "<<endl;
+                cin >> nombre;
+                string isbn;
+                cout<<"ingrese isbn: "<<endl;
+                cin>> isbn;
+                string autor;
+                cout<<"ingrese autor: "<<endl;
+                cin>> autor;
+                int numeroEdicion;
+                cout<<"ingrese numero de edicion: "<<endl;
+                cin>> numeroEdicion;
+                string mes;
+                cout<<"ingrese mes de publicacion: "<<endl;
+                cin >> mes;    
+                biblioteca[cont++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
                 break;
-            }        
+                
+            }
             case 2:{
+                string nombre;
+                cout<<"ingrese nombre: "<<endl;
+                cin >> nombre;
+                string isbn;
+                cout<<"ingrese isbn: "<<endl;
+                cin>> isbn;
+                string autor;
+                cout<<"ingrese autor: "<<endl;
+                cin>> autor;
+                string fecha;
+                cout<<"ingrese fecha de publicacion: "<<endl;
+                cin>> fecha;
+                string resumen;
+                cout<<"ingrese resumen: "<<endl;
+                cin >> resumen;    
+                biblioteca[cont++]=new Libro(nombre,isbn,autor,fecha,resumen);
+                break;    
+            }        
+            case 3:{
                 mostrarMaterial(biblioteca);
                 break;
             }        
-            case 3:{
+            case 4:{
                 cout<<"Ingrese nombre: "<<endl;
                 string nombreBuscado;
                 cin>> nombreBuscado;
@@ -204,14 +203,14 @@ int main(){
 
                 break;
             }    
-            case 4:{
+            case 5:{
                 cout<<"Ingrese autor: "<<endl;
                 string autorBuscado;
                 cin>> autorBuscado;
                 buscarMaterialautor(biblioteca,autorBuscado);
                 break;
             }     
-            case 5:{
+            case 6:{
                 string idNueva;
                 cout<<"ingrese id: "<<endl;
                 cin>>idNueva;
@@ -244,7 +243,7 @@ int main(){
                 }
                 break;
             }
-            case 6:{
+            case 7:{
                 string IdN;
                 cout<<"ingrese id: "<<endl;
                 cin>>IdN;
@@ -277,25 +276,31 @@ int main(){
                 }
                 break;
             }    
-            case 7:{
+            case 8:{
                 agregarUsuario(usuarios,max);
                 break;
             }    
-            case 8:{
+            case 9:{
                 string idN;
                 cout<<"ingrese id: "<<endl;
                 cin>>idN;
                 buscarUsuario(usuarios,idN,max);
                 break;
             }    
-            default:{
+            case 10:{
                 string idEliminar;
                 cout<<"ingrese id de usuario que desea eliminar: "<<endl;
                 cin>>idEliminar;
                 eliminarUsuario(usuarios,max,idEliminar);
                 break;
             }
+            default:
+               
+                break;
+            
         }
+        
+        
     }    
     return 0;
           
