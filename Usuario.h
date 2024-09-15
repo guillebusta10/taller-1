@@ -10,7 +10,8 @@ class Usuario{
         bool prestarMaterial(MaterialBibliografico*material);
         bool devolverMaterial(MaterialBibliografico*material);
         void mostrarMaterialesPrestados();
-        
+       
+
         string getNombre();
         string getId();
         void setNombre(string nombre);

@@ -87,7 +87,7 @@ void mostrarMaterial(MaterialBibliografico*biblioteca[]){
 
 
 
-Usuario *buscarUsuario(Usuario**usuarios, string idBuscada, int max){
+Usuario *buscarUsuario(Usuario *usuarios[], string idBuscada, int max){
     for (int i = 0; i < max; ++i) {
         if (usuarios[i] != nullptr && usuarios[i]->getId() == idBuscada) {
             return usuarios[i]; 
@@ -96,7 +96,7 @@ Usuario *buscarUsuario(Usuario**usuarios, string idBuscada, int max){
     return nullptr;
 }
 
-void agregarUsuario(Usuario*usuarios[],int max){
+/*void agregarUsuario(Usuario**usuarios,int max){
     string nombre;
     cout<<"ingrese nombre: "<<endl;
     cin >> nombre;
@@ -105,7 +105,7 @@ void agregarUsuario(Usuario*usuarios[],int max){
     cin>> id;
     usuarios[max++]=new Usuario(nombre,id);
     cout<<"usuario agregado"<<endl;
-}
+}*/
 
 void eliminarUsuario(Usuario*usuarios[],int max, string idEliminar){
     for(int i=0;i<max;i++){
@@ -192,6 +192,7 @@ int main(){
             }        
             case 3:{
                 mostrarMaterial(biblioteca);
+                
                 break;
             }        
             case 4:{
@@ -223,6 +224,7 @@ int main(){
                     for(int i=0;i<100;i++){
                         if(biblioteca[i]!=nullptr && biblioteca[i]->getIsbn()==isbnN){
                             if(usuario->prestarMaterial(biblioteca[i])){
+                                
                                 cout<<"material prestado exitosamente"<<endl;
 
                             }else{
@@ -277,21 +279,47 @@ int main(){
                 break;
             }    
             case 8:{
-                agregarUsuario(usuarios,max);
+            
+                string nombre;
+                cout<<"ingrese nombre: "<<endl;
+                cin >> nombre;
+                string id;
+                cout<<"ingrese id: "<<endl;
+                cin>> id;
+                usuarios[max++]=new Usuario(nombre,id);
+                cout<<"usuario agregado"<<endl;
                 break;
             }    
             case 9:{
                 string idN;
                 cout<<"ingrese id: "<<endl;
                 cin>>idN;
-                buscarUsuario(usuarios,idN,max);
+                Usuario *Ubuscado=buscarUsuario(usuarios,idN,max);
+                if(Ubuscado==nullptr){
+                    cout<<"el usuario no existe en el sistema"<<endl;
+
+                }else{
+                    Ubuscado->mostrarMaterialesPrestados();
+                
+                }
                 break;
             }    
             case 10:{
                 string idEliminar;
                 cout<<"ingrese id de usuario que desea eliminar: "<<endl;
                 cin>>idEliminar;
-                eliminarUsuario(usuarios,max,idEliminar);
+                ///eliminarUsuario(usuarios,max,idEliminar);
+                for(int i=0;i<max;i++){
+                if(usuarios[i]->getId()==idEliminar){
+                    for(int j=i;j<max-1;j++){
+                        usuarios[j]=usuarios[j+1];
+
+                    }
+                    --max;
+                    cout<<"se elimino el usuario"<<endl;
+
+                }
+            }
                 break;
             }
             default:
