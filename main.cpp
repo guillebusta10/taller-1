@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 using namespace std;
 
 
@@ -44,7 +45,53 @@ using namespace std;
     }
     archivo.close();
 };*/
+void procesarLinea(string& line, MaterialBibliografico* biblioteca[], int& contadorMaterial) {
+    istringstream iss(line);
+    string campo;
+    vector<string> campos;
 
+    while (getline(iss, campo, ',')) {
+        campos.push_back(campo);
+    }
+
+    if (campos.size() == 5) {
+        string nombre = campos[0];
+        string isbn = campos[1];
+        string autor = campos[2];
+        string cuartoCampo = campos[3];
+        string quintoCampo = campos[4];
+
+        int numeroEdicion;
+        try {
+            numeroEdicion = std::stoi(cuartoCampo);
+            biblioteca[contadorMaterial++] = new Revista(nombre, isbn, autor, numeroEdicion, quintoCampo);
+            
+        } catch (const std::invalid_argument&) {
+            biblioteca[contadorMaterial++] = new Libro(nombre, isbn, autor, cuartoCampo, quintoCampo);
+            
+        }
+    } else {
+        std::cerr << "Línea con formato desconocido: " << line << std::endl;
+    }
+}
+void procesarUsuario(string& line, Usuario* usuarios[], int& index) {
+    istringstream iss(line);
+    string campo;
+    vector<string> campos;
+
+    while (getline(iss, campo, ',')) {
+        campos.push_back(campo);
+    }
+
+    if (campos.size() == 2) {
+        string nombre = campos[0];
+        string id = campos[1];
+        usuarios[index++] = new Usuario(nombre, id);
+        
+    } else {
+        std::cerr << "Línea con formato desconocido en archivo de usuarios: " << line << std::endl;
+    }
+}
 void buscarMaterialnombre(MaterialBibliografico*biblioteca[],string nomBuscado ){
     bool encontrado=false;
     
@@ -52,11 +99,12 @@ void buscarMaterialnombre(MaterialBibliografico*biblioteca[],string nomBuscado )
         if(biblioteca[i]!=nullptr && biblioteca[i]->getNombre() == nomBuscado){
             biblioteca[i]->mostrarinformacion();
             encontrado=true;
+            return;
         }
     }
     if(!encontrado){
         cout<<" no se ha encontrado: "<<nomBuscado<<endl;
-
+        return;
     }
 };
 void buscarMaterialautor(MaterialBibliografico*biblioteca[],string autorBuscado ){
@@ -66,25 +114,28 @@ void buscarMaterialautor(MaterialBibliografico*biblioteca[],string autorBuscado 
         if(biblioteca[i]!=nullptr && biblioteca[i]->getAutor() == autorBuscado){
             biblioteca[i]->mostrarinformacion();
             encontrado=true;
+            return;
         }
     }
     if(!encontrado){
         cout<<" no se ha encontrado: "<<autorBuscado<<endl;
+        return;
 
     }
 };
 
-//void agregarmaterial(MaterialBibliografico *biblioteca[],int cont){
 
-
-void mostrarMaterial(MaterialBibliografico*biblioteca[]){
+void mostrarmateriales(MaterialBibliografico* biblioteca[]){
     for(int i=0;i<100;i++){
         if(biblioteca[i]!=nullptr){
             biblioteca[i]->mostrarinformacion();
+
+        }else{
+            return;
         }
     }
-}
 
+}
 
 
 Usuario *buscarUsuario(Usuario *usuarios[], string idBuscada, int max){
@@ -96,16 +147,6 @@ Usuario *buscarUsuario(Usuario *usuarios[], string idBuscada, int max){
     return nullptr;
 }
 
-/*void agregarUsuario(Usuario**usuarios,int max){
-    string nombre;
-    cout<<"ingrese nombre: "<<endl;
-    cin >> nombre;
-    string id;
-    cout<<"ingrese id: "<<endl;
-    cin>> id;
-    usuarios[max++]=new Usuario(nombre,id);
-    cout<<"usuario agregado"<<endl;
-}*/
 
 void eliminarUsuario(Usuario*usuarios[],int max, string idEliminar){
     for(int i=0;i<max;i++){
@@ -122,23 +163,45 @@ void eliminarUsuario(Usuario*usuarios[],int max, string idEliminar){
     
 } 
 int main(){
-    MaterialBibliografico *biblioteca[100];
+    string filenameMateriales = "materiales.txt";
+    string filenameUsuarios = "usuarios.txt";
+
+    MaterialBibliografico *biblioteca[100]={nullptr};
     int max;
     max=0;
+    Usuario *usuarios[max]={nullptr};
     
-    Usuario *usuarios[max];
-    
-    int cont;
-    cont=0;
-  
-    /*leerarchivo("",biblioteca,cont);*/
+    ifstream fileMateriales(filenameMateriales);
 
-    while(true){
+    
+    int contadorMaterial;
+    contadorMaterial=0;
+    int contadorUsuarios;
+    contadorUsuarios=0;
+    
+    std::string line;
+
+    while (getline(fileMateriales, line)) {
+        procesarLinea(line, biblioteca, contadorMaterial);
+    }
+    fileMateriales.close();
+
+    ifstream fileUsuarios(filenameUsuarios);
+    while (getline(fileUsuarios, line)) {
+        procesarUsuario(line, usuarios, contadorUsuarios);
+    }
+    fileUsuarios.close();
+
+
+    bool continuar;
+    continuar =true;
+    while(continuar==true){
         int opcion;
+        cout<<"-----------------------------"<<endl;
         cout<<"MENU USUARIO"<<endl;
         cout<<"Ingrese opcion: "<<endl;
-        cout<<"1.- AGREGAR MATERIAL (Libro) "<<endl;
-        cout<<"2.- AGREGAR MAYERIAL (Revista) "<<endl;
+        cout<<"1.- AGREGAR LIBRO "<<endl;
+        cout<<"2.- AGREGAR REVISTA "<<endl;
         cout<<"3.- MOSTRAR MATERIALES"<<endl;
         cout<<"4.- BUSCAR POR NOMBRE"<<endl;
         cout<<"5.- BUSCAR POR AUTOR"<<endl;
@@ -147,6 +210,8 @@ int main(){
         cout<<"8.- AGREGAR USUARIO "<<endl;
         cout<<"9.- BUSCAR USUARIO "<<endl;
         cout<<"10.- ELIMINAR USUARIO "<<endl;
+        cout<<"11.- SALIR "<<endl;
+        cout<<"----------------------------"<<endl;
         
         cin>>opcion;
         cin.ignore();
@@ -167,7 +232,7 @@ int main(){
                 string mes;
                 cout<<"ingrese mes de publicacion: "<<endl;
                 cin >> mes;    
-                biblioteca[cont++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
+                biblioteca[contadorMaterial++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
                 break;
                 
             }
@@ -187,11 +252,11 @@ int main(){
                 string resumen;
                 cout<<"ingrese resumen: "<<endl;
                 cin >> resumen;    
-                biblioteca[cont++]=new Libro(nombre,isbn,autor,fecha,resumen);
+                biblioteca[contadorMaterial++]=new Libro(nombre,isbn,autor,fecha,resumen);
                 break;    
             }        
             case 3:{
-                mostrarMaterial(biblioteca);
+                mostrarmateriales(biblioteca);            
                 
                 break;
             }        
@@ -238,7 +303,7 @@ int main(){
 
                     }
                     if(!MaterialE){
-                        cout<<"material con isbn: "<<isbnN<<"no encontrado"<<endl;
+                        cout<<"material con isbn: "<<isbnN<<" no encontrado"<<endl;
                     }
                 }else{
                     cout<<"usuario no encontrado"<<endl;
@@ -270,7 +335,7 @@ int main(){
 
                     }
                     if(!MaterialD){
-                        cout<<"material con isbn: "<<isbnD<<"no encontrado"<<endl;
+                        cout<<"material con isbn: "<<isbnD<<" no encontrado"<<endl;
                     }
                 }else{
                     cout<<"Usuario no encontrado"<<endl;
@@ -308,23 +373,27 @@ int main(){
                 string idEliminar;
                 cout<<"ingrese id de usuario que desea eliminar: "<<endl;
                 cin>>idEliminar;
-                ///eliminarUsuario(usuarios,max,idEliminar);
                 for(int i=0;i<max;i++){
-                if(usuarios[i]->getId()==idEliminar){
-                    for(int j=i;j<max-1;j++){
-                        usuarios[j]=usuarios[j+1];
+                    if(usuarios[i]->getId()==idEliminar){
+                        for(int j=i;j<max-1;j++){
+                            usuarios[j]=usuarios[j+1];
+
+                        }
+                        --max;
+                        cout<<"se elimino el usuario"<<endl;
 
                     }
-                    --max;
-                    cout<<"se elimino el usuario"<<endl;
-
                 }
-            }
                 break;
             }
-            default:
+            case 11:{
+                continuar=false;
+                break;
+            }
+            default:{
                
                 break;
+            }    
             
         }
         

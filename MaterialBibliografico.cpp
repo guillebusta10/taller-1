@@ -11,6 +11,7 @@ MaterialBibliografico::MaterialBibliografico(string nombre, string isbn, string 
 
 void MaterialBibliografico::mostrarinformacion()
 {
+    cout << "----------------------------------------"<< std::endl;
     cout << "Nombre: " << nombre << std::endl;
     cout << "ISBN: " << isbn << std::endl;
     cout << "Autor: " << autor << std::endl;

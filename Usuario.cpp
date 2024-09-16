@@ -39,10 +39,13 @@ bool Usuario::devolverMaterial(MaterialBibliografico*material){
 
 }
 void Usuario::mostrarMaterialesPrestados(){
-    cout<<"Materiales prestados: "<<endl;
+    cout<<"Materiales prestados de "<<nombre<<" :"<<endl;
     for(int i=0;i<5;i++){
         if(materialesPrestados[i] !=nullptr){
             cout<<materialesPrestados[i]->getNombre()<<endl;
+        }else{
+            cout<<"LISTA VACIA"<<endl;
+            return;
         }
     }    
 }
