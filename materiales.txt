@@ -8,3 +8,4 @@ Scientific American,0036-8733,Scientific American,2024,Agosto
 TIME,0040-781X,Time Inc.,2024,Julio
 Vogue,0042-8000,Conde Nast,2024,Junio
 The Economist,0013-0613,The Economist Group,2024,Septiembre
+sadada,214123432432,dsafsafsdgrgeer,221322,junio

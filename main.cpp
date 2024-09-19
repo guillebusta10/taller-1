@@ -10,41 +10,7 @@
 using namespace std;
 
 
-/*void leerarchivo(string Archivo,MaterialBibliografico* biblioteca[],int cont){
-    ifstream archivo(Archivo);
-    string linea;
-    while(getline(archivo,linea)&&cont<100){
-        stringstream s(linea);
-        string nombre,isbn,autor,fechapublicacion,resumenMes;
-        int numeroEdicion;
 
-        getline(s,nombre,",");
-        getline(s,isbn,",");
-        getline(s,autor,",");
-
-        if(getline(s,fechapublicacion)){
-            getline(s,resumenMes,",");
-            biblioteca[cont++]=new Libro(nombre,isbn,autor,fechapublicacion,resumenMes);
-
-
-            
-        }else{
-            s.clear();
-            s.seekg(0,ios::beg);
-            getline(s,nombre,",");
-            getline(s,isbn,",");
-            getline(s,autor,",");
-            getline(s,numeroEdicion,",");
-            getline(s,resumenMes,",");
-
-            biblioteca[cont++]=new Revista(nombre,isbn,autor,numeroEdicion,resumenMes);
-
-        }
-
-
-    }
-    archivo.close();
-};*/
 void procesarLinea(string& line, MaterialBibliografico* biblioteca[], int& contadorMaterial) {
     istringstream iss(line);
     string campo;
@@ -233,6 +199,14 @@ int main(){
                 cout<<"ingrese mes de publicacion: "<<endl;
                 cin >> mes;    
                 biblioteca[contadorMaterial++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
+                ofstream archivo("materiales.txt", ios::app);
+                if (archivo.is_open()) {
+                    archivo << nombre << "," << isbn << "," << autor << "," << numeroEdicion << "," << mes << endl;
+                    archivo.close();
+                    cout << "Revista agregada exitosamente." << endl;
+                } else {
+                    cerr << "No se pudo abrir el archivo materiales.txt." << endl;
+                }
                 break;
                 
             }
@@ -253,6 +227,15 @@ int main(){
                 cout<<"ingrese resumen: "<<endl;
                 cin >> resumen;    
                 biblioteca[contadorMaterial++]=new Libro(nombre,isbn,autor,fecha,resumen);
+                ofstream archivo("materiales.txt", ios::app);
+                if (archivo.is_open()) {
+                    archivo << nombre << "," << isbn << "," << autor << "," << fecha << "," << resumen << endl;
+                    archivo.close();
+                    cout << "Libro agregado exitosamente." << endl;
+                } else {
+                    cerr << "No se pudo abrir el archivo materiales.txt." << endl;
+                }
+                
                 break;    
             }        
             case 3:{
@@ -352,7 +335,15 @@ int main(){
                 cout<<"ingrese id: "<<endl;
                 cin>> id;
                 usuarios[max++]=new Usuario(nombre,id);
-                cout<<"usuario agregado"<<endl;
+                ofstream archivo("usuarios.txt", ios::app);
+                if (archivo.is_open()) {
+                    archivo << nombre << "," << id << endl;
+                    archivo.close();
+                    cout << "Usuario agregado exitosamente." << endl;
+                } else {
+                    cerr << "No se pudo abrir el archivo usuarios.txt." << endl;
+                }
+                
                 break;
             }    
             case 9:{
@@ -384,9 +375,41 @@ int main(){
 
                     }
                 }
+                ifstream archivo("usuarios.txt");
+                ofstream temp("temp_usuarios.txt");
+                string linea;
+                bool encontrado = false;
+
+                while (getline(archivo, linea)) {
+                    if (linea.find(idEliminar) == string::npos) {
+                        temp << linea << endl;
+                    } else {
+                        encontrado = true;
+                    }
+                }
+
+                archivo.close();
+                temp.close();
+
+                if (encontrado) {
+                    remove("usuarios.txt");
+                    rename("temp_usuarios.txt", "usuarios.txt");
+                    cout << "Usuario eliminado exitosamente." << endl;
+                } else {
+                    remove("temp_usuarios.txt");
+                    cout << "Usuario no encontrado." << endl;
+                }
                 break;
             }
             case 11:{
+                for (int i = 0; i < 100; ++i) {
+                    delete biblioteca[i]; 
+                }
+                
+                for (int i = 0; i < max; ++i) {
+                    delete usuarios[i]; 
+                }
+                
                 continuar=false;
                 break;
             }
