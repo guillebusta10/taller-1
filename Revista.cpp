@@ -19,7 +19,7 @@ void Revista::setNumeroEdicion(int numeroEdicion){
 void Revista::setMesPublicacion(string mesPublicacion){
     this->mesPublicacion=mesPublicacion;
 }
-void Revista::mostrarinformacion(){
+void Revista::mostrarinformacion(){ //muestra la informacion de cada revista
     MaterialBibliografico::mostrarinformacion(); 
     std::cout << "Numero de Edicion: " << numeroEdicion << std::endl;
     std::cout << "Mes: " << mesPublicacion << std::endl;

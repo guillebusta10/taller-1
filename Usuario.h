@@ -1,11 +1,11 @@
 #pragma once
 #include "MaterialBibliografico.h"
 using namespace std;
-class Usuario{
-    private:
+class Usuario{ //crea clase usuario
+    private: // crea atributos
         string nombre, id;
         MaterialBibliografico* materialesPrestados[5];
-    public:
+    public: // crea constructor, metodos, gets and sets
         Usuario(string nombre, string id);
         bool prestarMaterial(MaterialBibliografico*material);
         bool devolverMaterial(MaterialBibliografico*material);

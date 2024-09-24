@@ -1,11 +1,3 @@
-El Gran Gatsby,978-0743273565,F. Scott Fitzgerald,1925,Lujo
-1984,978-0451524935,George Orwell,1949,Dystopía
-Don Quijote de la Mancha,978-8491050077,Miguel de Cervantes,1605,Aventura
-Orgullo y Prejuicio,978-1503290563,Jane Austen,1813,Romántico
-El Código Da Vinci,978-0307474278,Dan Brown,2003,Misterio
-National Geographic,0027-9358,National Geographic Society,2024,Septiembre
-Scientific American,0036-8733,Scientific American,2024,Agosto
-TIME,0040-781X,Time Inc.,2024,Julio
-Vogue,0042-8000,Conde Nast,2024,Junio
-The Economist,0013-0613,The Economist Group,2024,Septiembre
-sadada,214123432432,dsafsafsdgrgeer,221322,junio
+El Gran Gatsby,978-0743273565,F. Scott Fitzgerald,5 de agosto de 1980,lujo
+El Código Da Vinci,978-0307474278,Dan Brown,3 de julio 200,misterio
+National Geographic,0027-9358,National Geographic Society,10,septiembre

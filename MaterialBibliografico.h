@@ -2,11 +2,11 @@
 #include <iostream>
 #include <string>
 using namespace std;
-class MaterialBibliografico{
-    protected:
+class MaterialBibliografico{ //crea  clase materialbibliografico
+    protected://crear atributos
         string nombre,isbn,autor;
         bool prestado;
-    public:
+    public://crear contructor, metodos, gets and sets 
         MaterialBibliografico(string,string,string);
         virtual void mostrarinformacion();
         bool estaprestado();

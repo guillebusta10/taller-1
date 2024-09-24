@@ -22,7 +22,7 @@ void Libro::setFechaPublicacion(string fechaPublicacion){
 void Libro::setResumen(string resumen){
     this->resumen=resumen;
 }
-void Libro::mostrarinformacion(){
+void Libro::mostrarinformacion(){ //muestra la informacion de cada revista
     MaterialBibliografico::mostrarinformacion(); 
     std::cout << "Fecha: " << fechaPublicacion << std::endl;
     std::cout << "Resumen: " << resumen << std::endl;

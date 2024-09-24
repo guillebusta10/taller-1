@@ -9,8 +9,11 @@
 #include <vector>
 using namespace std;
 
-
-
+/*lee el txt de materiales
+@param line crea linea a leer
+@param biblioteca[] array de punteros de la biblioteca 
+@param contadorMaterial contador de los materiales de la biblioteca
+return */
 void procesarLinea(string& line, MaterialBibliografico* biblioteca[], int& contadorMaterial) {
     istringstream iss(line);
     string campo;
@@ -40,6 +43,12 @@ void procesarLinea(string& line, MaterialBibliografico* biblioteca[], int& conta
         std::cerr << "Línea con formato desconocido: " << line << std::endl;
     }
 }
+/*lee archivo usuario
+@param line crea linea a leer
+@param usuarios[] array de punteros de los punteros 
+@param index posicion y contador de cada usuario, y el cual se va ingresando
+return
+*/
 void procesarUsuario(string& line, Usuario* usuarios[], int& index) {
     istringstream iss(line);
     string campo;
@@ -58,6 +67,11 @@ void procesarUsuario(string& line, Usuario* usuarios[], int& index) {
         std::cerr << "Línea con formato desconocido en archivo de usuarios: " << line << std::endl;
     }
 }
+/*busca los materiales por nombre del material 
+@param biblioteca[] array de punteros de la biblioteca
+@param nomBuscado nombre del material el cual se desea buscar
+return
+*/
 void buscarMaterialnombre(MaterialBibliografico*biblioteca[],string nomBuscado ){
     bool encontrado=false;
     
@@ -73,6 +87,11 @@ void buscarMaterialnombre(MaterialBibliografico*biblioteca[],string nomBuscado )
         return;
     }
 };
+/*busca los materiales por nombre del autor 
+@param biblioteca[] array de punteros de la biblioteca
+@param nomBuscado nombre del autor de el material el cual se desea buscar
+return
+*/
 void buscarMaterialautor(MaterialBibliografico*biblioteca[],string autorBuscado ){
     bool encontrado=false;
     
@@ -89,8 +108,10 @@ void buscarMaterialautor(MaterialBibliografico*biblioteca[],string autorBuscado 
 
     }
 };
-
-
+/*muestra todos los materiales del array biblioteca
+@param biblioteca[] array de punteros de la biblioteca
+return
+*/
 void mostrarmateriales(MaterialBibliografico* biblioteca[]){
     for(int i=0;i<100;i++){
         if(biblioteca[i]!=nullptr){
@@ -102,8 +123,12 @@ void mostrarmateriales(MaterialBibliografico* biblioteca[]){
     }
 
 }
-
-
+/*busca un usuario de el array usuarios
+@param usuarios[] array de punteros de los usuarios 
+@param idBuscada id del usuario que se desea buscar
+@param max maximo y contador de los usuarios 
+return un usuario que se desea buscar
+*/
 Usuario *buscarUsuario(Usuario *usuarios[], string idBuscada, int max){
     for (int i = 0; i < max; ++i) {
         if (usuarios[i] != nullptr && usuarios[i]->getId() == idBuscada) {
@@ -112,8 +137,12 @@ Usuario *buscarUsuario(Usuario *usuarios[], string idBuscada, int max){
     }
     return nullptr;
 }
-
-
+/*elimina un usuario 
+@param usuarios[] array de punteros de los usuarios 
+@param idEliminar id del usuario que se desea eliminar
+@param max maximo y contador de los usuarios 
+return
+*/
 void eliminarUsuario(Usuario*usuarios[],int max, string idEliminar){
     for(int i=0;i<max;i++){
         if(usuarios[i]->getId()==idEliminar){
@@ -128,37 +157,41 @@ void eliminarUsuario(Usuario*usuarios[],int max, string idEliminar){
     }
     
 } 
+
 int main(){
+    // Nombres de los archivos para los materiales y usuarios
     string filenameMateriales = "materiales.txt";
     string filenameUsuarios = "usuarios.txt";
 
+    // Inicialización de la biblioteca y los usuarios
     MaterialBibliografico *biblioteca[100]={nullptr};
-    int max;
+    int max;// Número máximo de usuarios
     max=0;
     Usuario *usuarios[max]={nullptr};
     
-    ifstream fileMateriales(filenameMateriales);
-
     
-    int contadorMaterial;
+    
+    int contadorMaterial;// Contador de materiales
     contadorMaterial=0;
-    int contadorUsuarios;
+    int contadorUsuarios;// Contador de usuarios
     contadorUsuarios=0;
-    
-    std::string line;
+    // Carga de materiales desde el archivo
+    ifstream fileMateriales(filenameMateriales);
+    string line;
 
     while (getline(fileMateriales, line)) {
         procesarLinea(line, biblioteca, contadorMaterial);
     }
     fileMateriales.close();
 
+    // Carga de usuarios desde el archivo
     ifstream fileUsuarios(filenameUsuarios);
     while (getline(fileUsuarios, line)) {
         procesarUsuario(line, usuarios, contadorUsuarios);
     }
     fileUsuarios.close();
 
-
+    // Menú principal de opciones para el usuario
     bool continuar;
     continuar =true;
     while(continuar==true){
@@ -180,25 +213,27 @@ int main(){
         cout<<"----------------------------"<<endl;
         
         cin>>opcion;
-        cin.ignore();
+        cin.ignore();// Limpiar el buffer de entrada
         switch (opcion){
-            case 1:{
+            case 1:{// Agregar Revista
                 string nombre;
                 cout<<"ingrese nombre: "<<endl;
-                cin >> nombre;
+                getline(cin, nombre);
                 string isbn;
                 cout<<"ingrese isbn: "<<endl;
-                cin>> isbn;
+                getline(cin, isbn);
                 string autor;
                 cout<<"ingrese autor: "<<endl;
-                cin>> autor;
+                getline(cin, autor);
                 int numeroEdicion;
                 cout<<"ingrese numero de edicion: "<<endl;
                 cin>> numeroEdicion;
                 string mes;
                 cout<<"ingrese mes de publicacion: "<<endl;
-                cin >> mes;    
+                getline(cin, mes);
+                // Creación de la nueva revista    
                 biblioteca[contadorMaterial++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
+                // Guardar la revista en el archivo
                 ofstream archivo("materiales.txt", ios::app);
                 if (archivo.is_open()) {
                     archivo << nombre << "," << isbn << "," << autor << "," << numeroEdicion << "," << mes << endl;
@@ -210,23 +245,25 @@ int main(){
                 break;
                 
             }
-            case 2:{
+            case 2:{// agregar libro
                 string nombre;
                 cout<<"ingrese nombre: "<<endl;
-                cin >> nombre;
+                getline(cin, nombre);
                 string isbn;
                 cout<<"ingrese isbn: "<<endl;
-                cin>> isbn;
+                getline(cin, isbn);
                 string autor;
                 cout<<"ingrese autor: "<<endl;
-                cin>> autor;
+                getline(cin, autor);
                 string fecha;
                 cout<<"ingrese fecha de publicacion: "<<endl;
-                cin>> fecha;
+                getline(cin, fecha);
                 string resumen;
                 cout<<"ingrese resumen: "<<endl;
-                cin >> resumen;    
+                getline(cin, resumen);
+                //Creación del nuevo libro    
                 biblioteca[contadorMaterial++]=new Libro(nombre,isbn,autor,fecha,resumen);
+                //Guardar el libro en el archivo
                 ofstream archivo("materiales.txt", ios::app);
                 if (archivo.is_open()) {
                     archivo << nombre << "," << isbn << "," << autor << "," << fecha << "," << resumen << endl;
@@ -238,28 +275,28 @@ int main(){
                 
                 break;    
             }        
-            case 3:{
+            case 3:{// Mostrar Materiales
                 mostrarmateriales(biblioteca);            
                 
                 break;
             }        
-            case 4:{
+            case 4:{ // Busca material por nombre
                 cout<<"Ingrese nombre: "<<endl;
                 string nombreBuscado;
-                cin>> nombreBuscado;
+                getline(cin, nombreBuscado);
                 buscarMaterialnombre(biblioteca,nombreBuscado);
 
 
                 break;
             }    
-            case 5:{
+            case 5:{// Busca material por autor 
                 cout<<"Ingrese autor: "<<endl;
                 string autorBuscado;
-                cin>> autorBuscado;
+                getline(cin, autorBuscado);
                 buscarMaterialautor(biblioteca,autorBuscado);
                 break;
             }     
-            case 6:{
+            case 6:{ // Prestar material
                 string idNueva;
                 cout<<"ingrese id: "<<endl;
                 cin>>idNueva;
@@ -293,7 +330,7 @@ int main(){
                 }
                 break;
             }
-            case 7:{
+            case 7:{ // Devolver material
                 string IdN;
                 cout<<"ingrese id: "<<endl;
                 cin>>IdN;
@@ -326,15 +363,16 @@ int main(){
                 }
                 break;
             }    
-            case 8:{
+            case 8:{//Agregar un usuario 
             
                 string nombre;
                 cout<<"ingrese nombre: "<<endl;
-                cin >> nombre;
+                getline(cin, nombre);
                 string id;
                 cout<<"ingrese id: "<<endl;
-                cin>> id;
+                getline(cin, id);
                 usuarios[max++]=new Usuario(nombre,id);
+                //guardarlo en el archivo
                 ofstream archivo("usuarios.txt", ios::app);
                 if (archivo.is_open()) {
                     archivo << nombre << "," << id << endl;
@@ -346,7 +384,7 @@ int main(){
                 
                 break;
             }    
-            case 9:{
+            case 9:{// Busca usuario 
                 string idN;
                 cout<<"ingrese id: "<<endl;
                 cin>>idN;
@@ -360,7 +398,7 @@ int main(){
                 }
                 break;
             }    
-            case 10:{
+            case 10:{ //Elimina usuario 
                 string idEliminar;
                 cout<<"ingrese id de usuario que desea eliminar: "<<endl;
                 cin>>idEliminar;
@@ -375,6 +413,7 @@ int main(){
 
                     }
                 }
+                //actualiza archivo
                 ifstream archivo("usuarios.txt");
                 ofstream temp("temp_usuarios.txt");
                 string linea;
@@ -401,16 +440,16 @@ int main(){
                 }
                 break;
             }
-            case 11:{
+            case 11:{// salir del sistema
                 for (int i = 0; i < 100; ++i) {
-                    delete biblioteca[i]; 
+                    delete biblioteca[i];//libera memoria 
                 }
                 
                 for (int i = 0; i < max; ++i) {
                     delete usuarios[i]; 
                 }
                 
-                continuar=false;
+                continuar=false;//termina ciclo while
                 break;
             }
             default:{

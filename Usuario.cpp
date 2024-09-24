@@ -10,7 +10,7 @@ Usuario::Usuario(string nombre,string id){
     }
 
 }
-bool Usuario::prestarMaterial(MaterialBibliografico*material){
+bool Usuario::prestarMaterial(MaterialBibliografico*material){ // metodo para prestar material
     for(int i=0;i<5;i++){
         if(materialesPrestados[i]==nullptr){
             if(!material->estaprestado()){
@@ -25,7 +25,7 @@ bool Usuario::prestarMaterial(MaterialBibliografico*material){
     return false;
 }
 
-bool Usuario::devolverMaterial(MaterialBibliografico*material){
+bool Usuario::devolverMaterial(MaterialBibliografico*material){ //metodo para devolver material
     for(int i=0;i<5;i++){
         if(materialesPrestados[i]==material){
             materialesPrestados[i]=nullptr;
@@ -38,7 +38,7 @@ bool Usuario::devolverMaterial(MaterialBibliografico*material){
     return false;
 
 }
-void Usuario::mostrarMaterialesPrestados(){
+void Usuario::mostrarMaterialesPrestados(){ //mostrar materiales prestados de cada usuario 
     cout<<"Materiales prestados de "<<nombre<<" :"<<endl;
     for(int i=0;i<5;i++){
         if(materialesPrestados[i] !=nullptr){

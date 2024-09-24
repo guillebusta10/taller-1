@@ -9,7 +9,7 @@ MaterialBibliografico::MaterialBibliografico(string nombre, string isbn, string 
     
 }
 
-void MaterialBibliografico::mostrarinformacion()
+void MaterialBibliografico::mostrarinformacion() //metodo virtual muestra la informacion de cada material
 {
     cout << "----------------------------------------"<< std::endl;
     cout << "Nombre: " << nombre << std::endl;
