@@ -195,7 +195,7 @@ int main(){
     bool continuar;
     continuar =true;
     while(continuar==true){
-        int opcion;
+        string opcion;
         cout<<"-----------------------------"<<endl;
         cout<<"MENU USUARIO"<<endl;
         cout<<"Ingrese opcion: "<<endl;
@@ -214,249 +214,258 @@ int main(){
         
         cin>>opcion;
         cin.ignore();// Limpiar el buffer de entrada
-        switch (opcion){
-            case 1:{// Agregar Revista
-                string nombre;
-                cout<<"ingrese nombre: "<<endl;
-                getline(cin, nombre);
-                string isbn;
-                cout<<"ingrese isbn: "<<endl;
-                getline(cin, isbn);
-                string autor;
-                cout<<"ingrese autor: "<<endl;
-                getline(cin, autor);
-                int numeroEdicion;
-                cout<<"ingrese numero de edicion: "<<endl;
-                cin>> numeroEdicion;
-                string mes;
-                cout<<"ingrese mes de publicacion: "<<endl;
-                getline(cin, mes);
-                // Creación de la nueva revista    
-                biblioteca[contadorMaterial++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
-                // Guardar la revista en el archivo
-                ofstream archivo("materiales.txt", ios::app);
-                if (archivo.is_open()) {
-                    archivo << nombre << "," << isbn << "," << autor << "," << numeroEdicion << "," << mes << endl;
-                    archivo.close();
-                    cout << "Revista agregada exitosamente." << endl;
-                } else {
-                    cerr << "No se pudo abrir el archivo materiales.txt." << endl;
-                }
-                break;
-                
-            }
-            case 2:{// agregar libro
-                string nombre;
-                cout<<"ingrese nombre: "<<endl;
-                getline(cin, nombre);
-                string isbn;
-                cout<<"ingrese isbn: "<<endl;
-                getline(cin, isbn);
-                string autor;
-                cout<<"ingrese autor: "<<endl;
-                getline(cin, autor);
-                string fecha;
-                cout<<"ingrese fecha de publicacion: "<<endl;
-                getline(cin, fecha);
-                string resumen;
-                cout<<"ingrese resumen: "<<endl;
-                getline(cin, resumen);
-                //Creación del nuevo libro    
-                biblioteca[contadorMaterial++]=new Libro(nombre,isbn,autor,fecha,resumen);
-                //Guardar el libro en el archivo
-                ofstream archivo("materiales.txt", ios::app);
-                if (archivo.is_open()) {
-                    archivo << nombre << "," << isbn << "," << autor << "," << fecha << "," << resumen << endl;
-                    archivo.close();
-                    cout << "Libro agregado exitosamente." << endl;
-                } else {
-                    cerr << "No se pudo abrir el archivo materiales.txt." << endl;
-                }
-                
-                break;    
-            }        
-            case 3:{// Mostrar Materiales
-                mostrarmateriales(biblioteca);            
-                
-                break;
-            }        
-            case 4:{ // Busca material por nombre
-                cout<<"Ingrese nombre: "<<endl;
-                string nombreBuscado;
-                getline(cin, nombreBuscado);
-                buscarMaterialnombre(biblioteca,nombreBuscado);
-
-
-                break;
-            }    
-            case 5:{// Busca material por autor 
-                cout<<"Ingrese autor: "<<endl;
-                string autorBuscado;
-                getline(cin, autorBuscado);
-                buscarMaterialautor(biblioteca,autorBuscado);
-                break;
-            }     
-            case 6:{ // Prestar material
-                string idNueva;
-                cout<<"ingrese id: "<<endl;
-                cin>>idNueva;
-                Usuario*usuario= buscarUsuario(usuarios,idNueva,max);
-                if(usuario){
-                    bool MaterialE=false;
-                    string isbnN;
+        int numero;
+        try {
+            // Intentar convertir la entrada a un entero
+            numero = std::stoi(opcion);
+            switch (numero){
+                case 1:{// Agregar Revista
+                    string nombre;
+                    cout<<"ingrese nombre: "<<endl;
+                    getline(cin, nombre);
+                    string isbn;
                     cout<<"ingrese isbn: "<<endl;
-                    cin>>isbnN;
-                    for(int i=0;i<100;i++){
-                        if(biblioteca[i]!=nullptr && biblioteca[i]->getIsbn()==isbnN){
-                            if(usuario->prestarMaterial(biblioteca[i])){
-                                
-                                cout<<"material prestado exitosamente"<<endl;
-
-                            }else{
-                                cout<<"el material ya esta prestado"<<endl;
-
-                            }
-                            MaterialE=true;
-                            break;
-                        }
-
-
-                    }
-                    if(!MaterialE){
-                        cout<<"material con isbn: "<<isbnN<<" no encontrado"<<endl;
-                    }
-                }else{
-                    cout<<"usuario no encontrado"<<endl;
-                }
-                break;
-            }
-            case 7:{ // Devolver material
-                string IdN;
-                cout<<"ingrese id: "<<endl;
-                cin>>IdN;
-                Usuario*usua= buscarUsuario(usuarios,IdN,max);
-                if(usua){ 
-                    bool MaterialD=false;
-                    string isbnD;
-                    cout<<"ingrese isbn: "<<endl;
-                    cin>>isbnD;  
-                    for(int i=0;i<100;i++){
-                        if(biblioteca[i]!=nullptr && biblioteca[i]->getIsbn()==isbnD){
-                            if(usua->devolverMaterial(biblioteca[i])){
-                                cout<<"material prestado exitosamente"<<endl;
-
-                            }else{
-                                cout<<"el material ya esta prestado"<<endl;
-                            }
-                            MaterialD=true;
-                            break;
-                        }
-
-
-                    }
-                    if(!MaterialD){
-                        cout<<"material con isbn: "<<isbnD<<" no encontrado"<<endl;
-                    }
-                }else{
-                    cout<<"Usuario no encontrado"<<endl;
-
-                }
-                break;
-            }    
-            case 8:{//Agregar un usuario 
-            
-                string nombre;
-                cout<<"ingrese nombre: "<<endl;
-                getline(cin, nombre);
-                string id;
-                cout<<"ingrese id: "<<endl;
-                getline(cin, id);
-                usuarios[max++]=new Usuario(nombre,id);
-                //guardarlo en el archivo
-                ofstream archivo("usuarios.txt", ios::app);
-                if (archivo.is_open()) {
-                    archivo << nombre << "," << id << endl;
-                    archivo.close();
-                    cout << "Usuario agregado exitosamente." << endl;
-                } else {
-                    cerr << "No se pudo abrir el archivo usuarios.txt." << endl;
-                }
-                
-                break;
-            }    
-            case 9:{// Busca usuario 
-                string idN;
-                cout<<"ingrese id: "<<endl;
-                cin>>idN;
-                Usuario *Ubuscado=buscarUsuario(usuarios,idN,max);
-                if(Ubuscado==nullptr){
-                    cout<<"el usuario no existe en el sistema"<<endl;
-
-                }else{
-                    Ubuscado->mostrarMaterialesPrestados();
-                
-                }
-                break;
-            }    
-            case 10:{ //Elimina usuario 
-                string idEliminar;
-                cout<<"ingrese id de usuario que desea eliminar: "<<endl;
-                cin>>idEliminar;
-                for(int i=0;i<max;i++){
-                    if(usuarios[i]->getId()==idEliminar){
-                        for(int j=i;j<max-1;j++){
-                            usuarios[j]=usuarios[j+1];
-
-                        }
-                        --max;
-                        cout<<"se elimino el usuario"<<endl;
-
-                    }
-                }
-                //actualiza archivo
-                ifstream archivo("usuarios.txt");
-                ofstream temp("temp_usuarios.txt");
-                string linea;
-                bool encontrado = false;
-
-                while (getline(archivo, linea)) {
-                    if (linea.find(idEliminar) == string::npos) {
-                        temp << linea << endl;
+                    getline(cin, isbn);
+                    string autor;
+                    cout<<"ingrese autor: "<<endl;
+                    getline(cin, autor);
+                    int numeroEdicion;
+                    cout<<"ingrese numero de edicion: "<<endl;
+                    cin>> numeroEdicion;
+                    string mes;
+                    cout<<"ingrese mes de publicacion: "<<endl;
+                    getline(cin, mes);
+                    // Creación de la nueva revista    
+                    biblioteca[contadorMaterial++]=new Revista (nombre,isbn,autor,numeroEdicion,mes);
+                    // Guardar la revista en el archivo
+                    ofstream archivo("materiales.txt", ios::app);
+                    if (archivo.is_open()) {
+                        archivo << nombre << "," << isbn << "," << autor << "," << numeroEdicion << "," << mes << endl;
+                        archivo.close();
+                        cout << "Revista agregada exitosamente." << endl;
                     } else {
-                        encontrado = true;
+                        cerr << "No se pudo abrir el archivo materiales.txt." << endl;
                     }
+                    break;
+                    
                 }
+                case 2:{// agregar libro
+                    string nombre;
+                    cout<<"ingrese nombre: "<<endl;
+                    getline(cin, nombre);
+                    string isbn;
+                    cout<<"ingrese isbn: "<<endl;
+                    getline(cin, isbn);
+                    string autor;
+                    cout<<"ingrese autor: "<<endl;
+                    getline(cin, autor);
+                    string fecha;
+                    cout<<"ingrese fecha de publicacion: "<<endl;
+                    getline(cin, fecha);
+                    string resumen;
+                    cout<<"ingrese resumen: "<<endl;
+                    getline(cin, resumen);
+                    //Creación del nuevo libro    
+                    biblioteca[contadorMaterial++]=new Libro(nombre,isbn,autor,fecha,resumen);
+                    //Guardar el libro en el archivo
+                    ofstream archivo("materiales.txt", ios::app);
+                    if (archivo.is_open()) {
+                        archivo << nombre << "," << isbn << "," << autor << "," << fecha << "," << resumen << endl;
+                        archivo.close();
+                        cout << "Libro agregado exitosamente." << endl;
+                    } else {
+                        cerr << "No se pudo abrir el archivo materiales.txt." << endl;
+                    }
+                    
+                    break;    
+                }        
+                case 3:{// Mostrar Materiales
+                    mostrarmateriales(biblioteca);            
+                    
+                    break;
+                }        
+                case 4:{ // Busca material por nombre
+                    cout<<"Ingrese nombre: "<<endl;
+                    string nombreBuscado;
+                    getline(cin, nombreBuscado);
+                    buscarMaterialnombre(biblioteca,nombreBuscado);
 
-                archivo.close();
-                temp.close();
 
-                if (encontrado) {
-                    remove("usuarios.txt");
-                    rename("temp_usuarios.txt", "usuarios.txt");
-                    cout << "Usuario eliminado exitosamente." << endl;
-                } else {
-                    remove("temp_usuarios.txt");
-                    cout << "Usuario no encontrado." << endl;
+                    break;
+                }    
+                case 5:{// Busca material por autor 
+                    cout<<"Ingrese autor: "<<endl;
+                    string autorBuscado;
+                    getline(cin, autorBuscado);
+                    buscarMaterialautor(biblioteca,autorBuscado);
+                    break;
+                }     
+                case 6:{ // Prestar material
+                    string idNueva;
+                    cout<<"ingrese id: "<<endl;
+                    cin>>idNueva;
+                    Usuario*usuario= buscarUsuario(usuarios,idNueva,max);
+                    if(usuario){
+                        bool MaterialE=false;
+                        string isbnN;
+                        cout<<"ingrese isbn: "<<endl;
+                        cin>>isbnN;
+                        for(int i=0;i<100;i++){
+                            if(biblioteca[i]!=nullptr && biblioteca[i]->getIsbn()==isbnN){
+                                if(usuario->prestarMaterial(biblioteca[i])){
+                                    
+                                    cout<<"material prestado exitosamente"<<endl;
+
+                                }else{
+                                    cout<<"el material ya esta prestado"<<endl;
+
+                                }
+                                MaterialE=true;
+                                break;
+                            }
+
+
+                        }
+                        if(!MaterialE){
+                            cout<<"material con isbn: "<<isbnN<<" no encontrado"<<endl;
+                        }
+                    }else{
+                        cout<<"usuario no encontrado"<<endl;
+                    }
+                    break;
                 }
-                break;
-            }
-            case 11:{// salir del sistema
-                for (int i = 0; i < 100; ++i) {
-                    delete biblioteca[i];//libera memoria 
-                }
+                case 7:{ // Devolver material
+                    string IdN;
+                    cout<<"ingrese id: "<<endl;
+                    cin>>IdN;
+                    Usuario*usua= buscarUsuario(usuarios,IdN,max);
+                    if(usua){ 
+                        bool MaterialD=false;
+                        string isbnD;
+                        cout<<"ingrese isbn: "<<endl;
+                        cin>>isbnD;  
+                        for(int i=0;i<100;i++){
+                            if(biblioteca[i]!=nullptr && biblioteca[i]->getIsbn()==isbnD){
+                                if(usua->devolverMaterial(biblioteca[i])){
+                                    cout<<"material prestado exitosamente"<<endl;
+
+                                }else{
+                                    cout<<"el material ya esta prestado"<<endl;
+                                }
+                                MaterialD=true;
+                                break;
+                            }
+
+
+                        }
+                        if(!MaterialD){
+                            cout<<"material con isbn: "<<isbnD<<" no encontrado"<<endl;
+                        }
+                    }else{
+                        cout<<"Usuario no encontrado"<<endl;
+
+                    }
+                    break;
+                }    
+                case 8:{//Agregar un usuario 
                 
-                for (int i = 0; i < max; ++i) {
-                    delete usuarios[i]; 
+                    string nombre;
+                    cout<<"ingrese nombre: "<<endl;
+                    getline(cin, nombre);
+                    string id;
+                    cout<<"ingrese id: "<<endl;
+                    getline(cin, id);
+                    usuarios[max++]=new Usuario(nombre,id);
+                    //guardarlo en el archivo
+                    ofstream archivo("usuarios.txt", ios::app);
+                    if (archivo.is_open()) {
+                        archivo << nombre << "," << id << endl;
+                        archivo.close();
+                        cout << "Usuario agregado exitosamente." << endl;
+                    } else {
+                        cerr << "No se pudo abrir el archivo usuarios.txt." << endl;
+                    }
+                    
+                    break;
+                }    
+                case 9:{// Busca usuario 
+                    string idN;
+                    cout<<"ingrese id: "<<endl;
+                    cin>>idN;
+                    Usuario *Ubuscado=buscarUsuario(usuarios,idN,max);
+                    if(Ubuscado==nullptr){
+                        cout<<"el usuario no existe en el sistema"<<endl;
+
+                    }else{
+                        Ubuscado->mostrarMaterialesPrestados();
+                    
+                    }
+                    break;
+                }    
+                case 10:{ //Elimina usuario 
+                    string idEliminar;
+                    cout<<"ingrese id de usuario que desea eliminar: "<<endl;
+                    cin>>idEliminar;
+                    for(int i=0;i<max;i++){
+                        if(usuarios[i]->getId()==idEliminar){
+                            for(int j=i;j<max-1;j++){
+                                usuarios[j]=usuarios[j+1];
+
+                            }
+                            --max;
+                            cout<<"se elimino el usuario"<<endl;
+
+                        }
+                    }
+                    //actualiza archivo
+                    ifstream archivo("usuarios.txt");
+                    ofstream temp("temp_usuarios.txt");
+                    string linea;
+                    bool encontrado = false;
+
+                    while (getline(archivo, linea)) {
+                        if (linea.find(idEliminar) == string::npos) {
+                            temp << linea << endl;
+                        } else {
+                            encontrado = true;
+                        }
+                    }
+
+                    archivo.close();
+                    temp.close();
+
+                    if (encontrado) {
+                        remove("usuarios.txt");
+                        rename("temp_usuarios.txt", "usuarios.txt");
+                        cout << "Usuario eliminado exitosamente." << endl;
+                    } else {
+                        remove("temp_usuarios.txt");
+                        cout << "Usuario no encontrado." << endl;
+                    }
+                    break;
                 }
+                case 11:{// salir del sistema
+                    for (int i = 0; i < 100; ++i) {
+                        delete biblioteca[i];//libera memoria 
+                    }
+                    
+                    for (int i = 0; i < max; ++i) {
+                        delete usuarios[i]; 
+                    }
+                    
+                    continuar=false;//termina ciclo while
+                    break;
+                }
+                default:{
                 
-                continuar=false;//termina ciclo while
-                break;
+                    break;
+                }    
+                
             }
-            default:{
-               
-                break;
-            }    
-            
+        } catch (const std::invalid_argument&) {
+            std::cerr << "Numero invalido. Intenta de nuevo." << std::endl;
+        } catch (const std::out_of_range&) {
+            std::cerr << "Numero esta fuera del rango permitido." << std::endl;
         }
         
         
